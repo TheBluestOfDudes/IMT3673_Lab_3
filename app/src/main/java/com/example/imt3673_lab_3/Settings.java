@@ -7,12 +7,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class Settings extends AppCompatActivity {
 
+    //UI elements
     private TextView mTxtGravity;
-    private TextView mTxtThreshold;
+    private TextView mTxtTreshold;      //Could not get a seekbar to function, so i used a plain text view
     private Button mBtnFinish;
 
     @Override
@@ -20,13 +22,18 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        //Getting UI elements
         this.mTxtGravity = findViewById(R.id.txt_gravity);
-        this.mTxtThreshold = findViewById(R.id.txt_threshold);
+        this.mTxtTreshold = findViewById(R.id.txt_treshold);
         this.mBtnFinish = findViewById(R.id.btn_finish);
 
+        //Innitialize gravitiy and threshold to
         this.mTxtGravity.setText(MainActivity.GRAVITY.toString());
-        this.mTxtThreshold.setText(MainActivity.THRESH.toString());
+        this.mTxtTreshold.setText(MainActivity.TRESH.toString());
+
+        //Registers changes to the text views
         registerChange();
+        //Registers button click
         registerButton();
     }
 
@@ -44,6 +51,7 @@ public class Settings extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                //Ensures that whenever the text view is changed, it is both a number and not blank
                 if(mTxtGravity.getText().toString().matches("")){
                     mBtnFinish.setEnabled(false);
                 }
@@ -55,7 +63,7 @@ public class Settings extends AppCompatActivity {
                 }
             }
         });
-        this.mTxtThreshold.addTextChangedListener(new TextWatcher() {
+        this.mTxtTreshold.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -68,10 +76,11 @@ public class Settings extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(mTxtThreshold.getText().toString().matches("")){
+                //Ensures that whenever the text view is changed, it is both a number and not blank
+                if(mTxtTreshold.getText().toString().matches("")){
                     mBtnFinish.setEnabled(false);
                 }
-                else if (!(mTxtThreshold.getText().toString().matches("\\d+(?:\\.\\d+)?"))){
+                else if (!(mTxtTreshold.getText().toString().matches("\\d+(?:\\.\\d+)?"))){
                     mBtnFinish.setEnabled(false);
                 }
                 else{
@@ -83,8 +92,9 @@ public class Settings extends AppCompatActivity {
 
     private void registerButton(){
         this.mBtnFinish.setOnClickListener(v->{
+            //Updates gravity and treshold in mainactivity
             MainActivity.GRAVITY = Float.parseFloat(this.mTxtGravity.getText().toString());
-            MainActivity.THRESH = (Float.parseFloat(this.mTxtThreshold.getText().toString()));
+            MainActivity.TRESH = (Integer.parseInt(this.mTxtTreshold.getText().toString()));
             finish();
         });
     }
